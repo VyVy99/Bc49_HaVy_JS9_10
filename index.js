@@ -13,7 +13,7 @@ function themNhanVien(event) {
     var nhanVien = new NhanVien()
 
     for (var i = 0; i < arrIdInput.length; i++) {
-        var value = document.getElementById(arrIdInput[i]).value;
+        var value = getID(arrIdInput[i]).value;
         nhanVien[arrIdInput[i]] = value;
     }
 
@@ -28,10 +28,11 @@ function themNhanVien(event) {
 
         luuDuLieuLocal();
         hienThiDanhSachNhanVien(arrNhanVien);
+        getID("formNhanVien")?.reset()
     }
 }
 
-document.getElementById('btnThemNV').onclick = themNhanVien;
+getID('btnThemNV').onclick = themNhanVien;
 
 function hienThiDanhSachNhanVien(data = arrNhanVien) {
     var content = "";
@@ -57,20 +58,24 @@ function hienThiDanhSachNhanVien(data = arrNhanVien) {
             </tr>
         `;
     }
-    document.getElementById("tableDanhSach").innerHTML = content;
+    getID("tableDanhSach").innerHTML = content;
+}
+function timVitriNhanVien(id) {
+    let index = -1
+    for (var i = 0; i < arrNhanVien.length; i++) {
+        if (arrNhanVien[i].id == id) {
+            index = i;
+            break
+        }
+    }
+    return index
 }
 
 function xoaNhanVien(id) {
 
     // tạo ra 1 biêsn index
-    var index = -1;
-    for (var i = 0; i < arrNhanVien.length; i++) {
-        if (arrNhanVien[i].tknv == id) {
-            index = i;
-            // thoát khỏi vòng lặp
-
-        }
-    }
+    var index = timVitriNhanVien(id)
+    
     arrNhanVien.splice(index, 1);
     luuDuLieuLocal();
     hienThiDanhSachNhanVien(arrNhanVien);
@@ -79,11 +84,11 @@ function xoaNhanVien(id) {
 function luuDuLieuLocal() {
     // chueyenr mảng dữ liệu json.stringtify trc khi lưu
     var newArr = JSON.stringify(arrNhanVien);
-    localStorage.setItem("arrNhanVien", newArr);
+    localStorage.setItem("employeeList", newArr);
 
 }
 function layDuLieuLocal() {
-    var arr = localStorage.getItem("arrNhanVien");
+    var arr = localStorage.getItem("employeeList");
     // chuyển đổi về kiẻu dữ liệu ban đầu:
 
     if (arr != null) {
@@ -97,20 +102,17 @@ function layDuLieuLocal() {
 layDuLieuLocal();
 
 function suaNhanVien(id) {
-    var nhanVien = {}
+
     //tìm thông tin nhana vieen co id trong mảng arrNhanVien
     //nếu có thì gọi mảng arrIdinput để cập nhật gái trị mới từ nhanVien tìm đc
     // Tìm thông tin nhân viên có id trong mảng arrNhanVien
-    for (var i = 0; i < arrNhanVien.length; i++) {
-        if (arrNhanVien[i].id == id) {
-            nhanVien = arrNhanVien[i];
-            break;
-        }
-    }
+
+    var index = timVitriNhanVien(id)
+    const nhanVien = arrNhanVien[index]
     // Nếu tìm thấy nhân viên, gán giá trị mới từ form vào thuộc tính của nhân viên
     if (nhanVien.id) {
         for (var z = 0; z < arrIdInput.length; z++) {
-            const domInput = document.getElementById(arrIdInput[z])
+            const domInput = getID(arrIdInput[z])
             if (arrIdInput[z] === 'id') {
                 domInput.readOnly = true
             }
@@ -118,14 +120,6 @@ function suaNhanVien(id) {
 
         }
 
-        // Tính toán lại tổng lương và xếp loại của nhân viên
-        nhanVien.tongLuong = nhanVien.tinhLuong();
-        nhanVien.xepLoai = nhanVien.xepLoaiNhanVien();
-        // Cập nhật lại mảng arrNhanVien và lưu vào localStorage
-        luuDuLieuLocal();
-        hienThiDanhSachNhanVien(arrNhanVien);
-    } else {
-        alert("Khong tim thay id ", id)
     }
 }
 
@@ -134,7 +128,7 @@ function capNhatNhanVien() {
     // neu cos nhan vien , ta thay doi du lieu , sau do luu dl xuong local , reset lai form, render giao dien
     var nhanVien = new NhanVien()
     for (let index = 0; index < arrIdInput.length; index++) {
-        nhanVien[arrIdInput[index]] = document.getElementById(arrIdInput[index]).value
+        nhanVien[arrIdInput[index]] = getID(arrIdInput[index]).value
     }
 
     for (var i = 0; i < arrNhanVien.length; i++) {
@@ -145,7 +139,7 @@ function capNhatNhanVien() {
     }
     luuDuLieuLocal()
     hienThiDanhSachNhanVien()
-
+    getID("formNhanVien")?.reset()
 }
 window.capNhatNhanVien = capNhatNhanVien
 
@@ -170,10 +164,9 @@ function search(e) {
 }
 
 
-document.getElementById('btnDong').onclick = function () {
-    document.getElementById("formNhanVien")?.reset()
+getID('btnDong').onclick = function () {
     for (let index = 0; index < arrnoItInput.length; index++) {
-        document.getElementById(arrnoItInput[index]).innerHTML = ""
+        getID(arrnoItInput[index]).innerHTML = ""
 
     }
 }

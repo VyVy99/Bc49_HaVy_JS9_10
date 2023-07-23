@@ -23,12 +23,12 @@ function kiemTraEmail(valueEmail, arrnoItInput) {
     var valid =true
     if (valueEmail !== "") {
         if (!regexEmail.test(valueEmail)) {
-            document.getElementById(arrnoItInput).innerHTML =
+            document.getElementById('tbEmail').innerHTML =
                 "định dạng email ko đúng";
             valid = valid && false;
         } else {
             // đàu tiên gán gia giá vào cho biến valid
-            document.getElementById(arrnoItInput).innerHTML = "";
+            document.getElementById('tbEmail').innerHTML = "";
             valid = valid && true;
         }
         return valid

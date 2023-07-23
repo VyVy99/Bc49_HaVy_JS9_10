@@ -26,3 +26,7 @@ function removeVietnameseTones(str) {
     str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
     return str;
 }
+
+function getID(id) {
+    return document.getElementById(id)
+}
